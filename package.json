@@ -1,0 +1,8 @@
+{
+  "name": "graphql-node-tutorial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:azhalkouski/graphql-node-tutorial.git",
+  "author": "Artsiom Zhalkouski <azhalkouski@gmail.com>",
+  "license": "MIT"
+}

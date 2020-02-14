@@ -11,7 +11,8 @@ let idCount = links.length;
 const resolvers = {
   Query: {
     info: () => 'This is the API of the graphql-node tutorial',
-    feed: () => links
+    feed: () => links,
+    link: (parent, args) => links.find(el => el.id === args.id)
   },
   Mutation: {
     post: (parent, args) => {

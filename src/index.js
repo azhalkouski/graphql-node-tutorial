@@ -1,40 +1,35 @@
 const { GraphQLServer } = require('graphql-yoga');
+const { prisma } = require('../generated/prisma-client');
 
-let links = [{
-  id: 'link-0',
-  url: 'www.howtographql.com',
-  description: 'Fullstack tutorial for GraphQL'
-}]
 
-let idCount = links.length;
-
+/**
+ * context
+ * The context argument is a plain JavaScript object that every resolver in the resolver chain can
+ * read from and write to - it thus basically is a means for resolvers to communicate. It’s also
+ * possible to already write to it at the moment when the GraphQL server itself is being
+ * initialized. So, it’s also a way for you to pass arbitrary data or functions to theresolvers.
+ */
 const resolvers = {
   Query: {
     info: () => 'This is the API of the graphql-node tutorial',
-    feed: () => links,
-    link: (parent, args) => links.find(el => el.id === args.id)
+    feed: (root, args, context, info) => {
+      return context.prisma.links();
+    },
   },
   Mutation: {
-    post: (parent, args) => {
-      const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
+    post: (root, args, context) => {
+      return context.prisma.createLink({
         url: args.url,
-      };
-      links.push(link);
-      return link;
+        description: args.description,
+      });
     }
   }
-  // Link: {
-  //   id: (parent) => parent.id,
-  //   description: (parent) => parent.description,
-  //   url: (parent) => parent.url
-  // }
 };
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
-  resolvers
+  resolvers,
+  context: { prisma },
 });
 
 server.start(() => console.log('Server is running on http://localhost:4000'));

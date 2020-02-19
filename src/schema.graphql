@@ -13,6 +13,7 @@ type Link {
   id: ID!
   description: String!
   url: String!
+  postedBy: User
 }
 
 type AuthPayload {
@@ -26,3 +27,8 @@ type User {
   email: String!
   links: [Link!]!
 }
+
+# QUESTION: Why was the 'User' type redefined in the application schema when it's already
+# part of the Prisma database schema and could be imported from there?
+# ANSWER: To hide potentially sensitive information from client applications
+
